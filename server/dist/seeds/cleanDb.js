@@ -8,18 +8,19 @@ import db from '../config/connection.js';
  * @returns {Promise<void>}
  */
 export default async function cleanCollection(modelName, collectionName) {
-  try {
-    const model = models[modelName];
-    if (!model?.db?.db) {
-      throw new Error(`Model '${modelName}' does not exist or has no db connection.`);
-    }
+  const model = models[modelName];
 
-    const collections = await model.db.db.listCollections({ name: collectionName }).toArray();
+  if (!model) {
+    throw new Error(`Model '${modelName}' not found.`);
+  }
 
-    if (collections.length) {
-      await db.dropCollection(collectionName);
-    }
-  } catch (err) {
-    throw err;
+  if (!model.db || !model.db.db) {
+    throw new Error(`Model '${modelName}' does not have a valid db connection.`);
+  }
+
+  const collections = await model.db.db.listCollections({ name: collectionName }).toArray();
+
+  if (collections.length > 0) {
+    await db.dropCollection(collectionName);
   }
 }
