@@ -5,10 +5,17 @@
   "scripts": {
     "start": "cd server && npm run start",
     "seed": "cd server && npm run seed",
-    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
-    "install": "cd server && npm i && cd ../client && npm i",
-    "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
-    "render-build": "npm install && npm run build",
+
+    "develop": "npm run watch-server & npm run dev-client",
+    "watch-server": "cd server && npm run watch",
+    "dev-client": "cd client && npm run dev",
+
+    "install": "cd server && npm install && cd ../client && npm install",
+
+    "build": "npm run build-server && npm run build-client",
+    "build-server": "cd server && npm run build",
+    "build-client": "cd client && npm run build",
+
     "test": "npx cypress run --browser electron",
     "test-component": "npx cypress run --component",
     "test-gui": "npx cypress open"
@@ -17,7 +24,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^8.2.2",
     "cypress": "^13.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -26,5 +32,8 @@
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.1",
     "vitest": "^2.0.3"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
